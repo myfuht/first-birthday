@@ -3,113 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生日快乐祝福</title>
+    <title>生日快乐，黄宇！</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #fdf2f8;
+            background-color: #f0f8fb; /* 更清爽的浅蓝色背景 */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-image: url('https://img.freepik.com/free-vector/colorful-birthday-confetti-background_1017-26589.jpg');
+            background-image: url('https://img.freepik.com/free-vector/abstract-blue-geometric-pattern-background_1035-17545.jpg'); /* 更中性的几何背景 */
             background-size: cover;
         }
         .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 90%;
-            max-width: 600px;
+            max-width: 700px;
         }
         h1 {
-            color: #e53e3e;
-            font-size: 2.5em;
-            margin-bottom: 20px;
+            color: #2d3748; /* 深灰色标题 */
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
-        .input-box {
-            margin: 20px 0;
-        }
-        input[type="text"] {
-            padding: 12px 20px;
-            width: 70%;
-            border: 2px solid #fbb6ce;
-            border-radius: 30px;
-            font-size: 1em;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        input[type="text"]:focus {
-            border-color: #ed8936;
+        .subtitle {
+            color: #4a5568;
+            font-size: 1.2em;
+            margin-bottom: 30px;
         }
         button {
-            background-color: #ed8936;
+            background-color: #4299e1; /* 蓝色按钮 */
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 1.1em;
+            padding: 16px 32px;
+            font-size: 1.2em;
             border-radius: 30px;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            margin-top: 10px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            font-weight: 600;
         }
         button:hover {
-            background-color: #dd6b20;
-            transform: translateY(-2px);
+            background-color: #3182ce;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(66, 153, 225, 0.3);
         }
         #wish-display {
             margin-top: 30px;
-            padding: 25px;
-            background-color: #fef7fb;
+            padding: 30px;
+            background-color: #f8f9fa;
             border-radius: 15px;
-            min-height: 80px;
+            min-height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5em;
+            font-size: 1.8em;
             color: #2d3748;
             font-weight: 500;
-            opacity: 0;
+            line-height: 1.6;
+            opacity: 0; /* 初始隐藏 */
             transition: opacity 0.5s ease-in-out;
         }
         #wish-display.show {
-            opacity: 1;
+            opacity: 1; /* 显示时淡入 */
+        }
+        /* 为每个字符添加动画效果的基础样式 */
+        #wish-display span {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-block; /* 让span可以被定位和动画 */
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>生日快乐！</h1>
-        <div class="input-box">
-            <input type="text" id="name-input" placeholder="请输入寿星的名字">
-        </div>
-        <button id="wish-button">点击获取生日祝福</button>
+        <h1>生日快乐</h1>
+        <div class="subtitle">致 黄宇</div>
+        
+        <button id="wish-button">点击获取我的祝福</button>
+
+        <!-- 用于显示祝福的区域 -->
         <div id="wish-display"></div>
     </div>
 
     <script>
-        // 直接在前端写祝福列表（替代后端的wishes.txt）
+        // 适合男生的生日祝福列表
         const wishes = [
-            "生日快乐！愿所有美好都如期而至！",
-            "祝你今天像公主一样闪耀！",
-            "新的一岁，暴富暴美！",
-            "愿你的每一天都充满阳光和欢笑！",
-            "生日快乐，健康、开心、幸运！",
-            "愿你永远年轻，永远热泪盈眶！",
-            "在这个特别的日子里，祝你生日快乐，心想事成！"
+            "愿你新的一岁，继续乘风破浪，做自己人生的主角！",
+            "生日快乐！愿你前路坦荡，万事顺意，每天都有新惊喜！",
+            "新的旅程，愿你眼里有光，心中有爱，脚下有风！",
+            "生日快乐，兄弟！愿你健康、暴富、快乐，游戏段位越来越高！",
+            "愿你像一颗恒星，永远闪耀，把生活过成自己喜欢的模样！",
+            "新的一岁，愿你勇敢、自由，去探索更多未知的精彩！",
+            "生日快乐！愿你所有的努力都有回报，所有的梦想都能开花！"
         ];
 
-        // 按钮点击逻辑（替代后端接口）
-        document.getElementById('wish-button').addEventListener('click', function() {
-            const name = document.getElementById('name-input').value.trim() || '亲爱的朋友';
+        const $button = document.getElementById('wish-button');
+        const $wishDisplay = document.getElementById('wish-display');
+
+        $button.addEventListener('click', function() {
+            // 1. 随机选择一条祝福
             const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
-            const displayBox = document.getElementById('wish-display');
-            displayBox.textContent = `${name}，${randomWish}`;
-            displayBox.classList.add('show');
+            
+            // 2. 拼接成完整的祝福语句
+            const fullWish = `黄宇，${randomWish}`;
+
+            // 3. 清空显示区域，准备显示新内容
+            $wishDisplay.innerHTML = ''; 
+            $wishDisplay.classList.remove('show'); 
+            
+            // 4. 调用打字机函数来显示文字
+            typeWriteEffect(fullWish);
         });
+
+        // 定义文字飘出（打字机）效果的函数
+        function typeWriteEffect(text) {
+            $wishDisplay.classList.add('show'); // 先让容器淡入
+            
+            for (let i = 0; i < text.length; i++) {
+                // 创建一个span元素来包裹每个字符
+                const charSpan = document.createElement('span');
+                charSpan.textContent = text[i];
+                
+                // 将span添加到显示区域
+                $wishDisplay.appendChild(charSpan);
+                
+                // 使用setTimeout来为每个字符设置延迟动画
+                // 延迟时间 = 字符索引 * 50毫秒，可以调整这个值来改变动画速度
+                setTimeout(() => {
+                    charSpan.style.opacity = '1';
+                    charSpan.style.transform = 'translateY(0)';
+                }, i * 50);
+            }
+        }
+
     </script>
+
 </body>
 </html>
