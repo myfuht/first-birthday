@@ -1,1 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐祝福</title>
+    <style>
+        /* 这是一些简单的 CSS 样式，让页面更好看 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #fdf2f8; /* 淡粉色背景 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('https://img.freepik.com/free-vector/colorful-birthday-confetti-background_1017-26589.jpg');
+            background-size: cover;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #e53e3e; /* 红色标题 */
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .input-box {
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            padding: 12px 20px;
+            width: 70%;
+            border: 2px solid #fbb6ce;
+            border-radius: 30px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #ed8936; /* 聚焦时变橙色 */
+        }
+        button {
+            background-color: #ed8936; /* 橙色按钮 */
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #dd6b20; /*  hover 时颜色变深 */
+            transform: translateY(-2px); /* 轻微上移 */
+        }
+        #wish-display {
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #fef7fb;
+            border-radius: 15px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: #2d3748; /* 深灰色文字 */
+            font-weight: 500;
+            opacity: 0; /* 初始时隐藏 */
+            transition: opacity 0.5s ease-in-out;
+        }
+        #wish-display.show {
+            opacity: 1; /* 添加 show 类时显示 */
+        }
+    </style>
+</head>
+<body>
 
+    <div class="container">
+        <h1>生日快乐！</h1>
+        
+        <div class="input-box">
+            <input type="text" id="name-input" placeholder="请输入寿星的名字">
+        </div>
+
+        <button id="wish-button">点击获取生日祝福</button>
+
+        <!-- 这里将用来显示祝福 -->
+        <div id="wish-display"></div>
+    </div>
+
+    <!-- 引入 jQuery 库，用于简化 JavaScript 操作 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // 当网页加载完成后执行
+        $(document).ready(function() {
+            // 找到按钮和显示区域
+            const $button = $('#wish-button');
+            const $wishDisplay = $('#wish-display');
+            const $nameInput = $('#name-input');
+
+            // 为按钮添加点击事件
+            $button.click(function() {
+                // 获取输入框中的名字
+                const name = $nameInput.val().trim();
+
+                // 向服务器发送一个 POST 请求
+                $.ajax({
+                    url: '/get_wish', // 请求的地址，对应 app.py 中的 /get_wish 路由
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ 'name': name }), // 发送的数据（名字）
+                    success: function(response) {
+                        // 请求成功后，将返回的祝福显示在页面上
+                        $wishDisplay.text(response.wish);
+                        // 添加 'show' 类来触发淡入动画
+                        $wishDisplay.addClass('show');
+                    },
+                    error: function() {
+                        // 如果出错了，显示一个错误信息
+                        $wishDisplay.text('哎呀，获取祝福失败了，请再试一次！');
+                        $wishDisplay.addClass('show');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
