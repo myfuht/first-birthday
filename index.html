@@ -10,15 +10,16 @@
             background-color: #f0f8fb;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            align-items: flex-start; /* 改为顶部对齐，避免内容被视口底部裁剪 */
+            min-height: 100vh; /* 用min-height替代height，适配长内容 */
             margin: 0;
             background-image: url('https://img.freepik.com/free-vector/abstract-blue-geometric-pattern-background_1035-17545.jpg');
             background-size: cover;
-            overflow: hidden;
+            overflow: auto; /* 允许页面滚动，避免内容溢出视口 */
             position: relative;
+            padding: 20px 0; /* 增加上下内边距，避免内容贴边 */
         }
-        /* 粒子背景效果 */
+        /* 粒子背景效果 - 降低层级，避免遮挡内容 */
         .particles {
             position: absolute;
             top: 0;
@@ -26,7 +27,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 0;
+            z-index: 0; /* 确保在最底层 */
         }
         .container {
             background-color: rgba(255, 255, 255, 0.95);
@@ -39,7 +40,8 @@
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             z-index: 1;
-            overflow: hidden;
+            overflow: visible; /* 允许内部内容溢出显示 */
+            margin-top: 30px; /* 增加顶部间距 */
         }
         /* 登录界面样式 */
         .login-container {
@@ -134,6 +136,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(66, 153, 225, 0.2);
+            z-index: 2; /* ; /* 按钮层级高于背景 */
         }
         .btn::before {
             content: '';
@@ -156,15 +159,17 @@
             transform: translateY(-1px);
             box-shadow: 0 5px 15px rgba(66, 153, 225, 0.2);
         }
-        /* 祝福卡片样式 */
+        /* 祝福卡片样式 - 核心修改：确保内容完整显示 */
         #wish-display {
             margin-top: 30px;
             padding: 35px;
             background: linear-gradient(135deg, #f8f9fa 0%, #f0f8fb 100%);
             border-radius: 15px;
             min-height: 120px;
+            max-height: calc(100vh - 400px); /* 限制最大高度，避免超出视口 */
+            overflow-y: auto; /* 内容过多时显示垂直滚动条 */
             display: flex;
-            align-items: center;
+            align-items: flex-start; /* 文字顶部对齐，避免垂直居中导致裁剪 */
             justify-content: center;
             font-size: 1.8em;
             color: #2d3748;
@@ -176,6 +181,9 @@
             position: relative;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(66, 153, 225, 0.1);
+            z-index: 2; /* 提高层级，避免被粒子/纸屑遮挡 */
+            width: 100%;
+            box-sizing: border-box; /* 确保padding不撑大容器 */
         }
         #wish-display.show {
             opacity: 1;
@@ -206,7 +214,7 @@
             height: 60px;
             border-radius: 50%;
             background: rgba(66, 153, 225, 0.1);
-            z-index: 0;
+            z-index: 0; /* 装饰元素在容器内底层 */
             animation: float 6s ease-in-out infinite;
         }
         .decor-1 {
@@ -228,7 +236,7 @@
             width: 30px;
             height: 30px;
         }
-        /* 彩色纸屑效果容器 */
+        /* 彩色纸屑效果容器 - 层级低于祝福内容 */
         .confetti-container {
             position: fixed;
             top: 0;
@@ -236,7 +244,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 100;
+            z-index: 1; /* 低于祝福卡片 */
             opacity: 0;
             transition: opacity 0.5s ease;
         }
@@ -249,6 +257,8 @@
             opacity: 0;
             transform: translateY(20px);
             transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            box-sizing: border-box;
         }
         .container.login-success .content-area {
             display: block;
@@ -260,20 +270,22 @@
             transform: scale(1.02);
             box-shadow: 0 20px 40px rgba(66, 153, 225, 0.15);
         }
-        /* 响应式调整 */
+        /* 响应式调整 - 优化小屏幕文字大小 */
         @media (max-width: 576px) {
             .container {
                 padding: 30px 20px;
+                margin-top: 20px;
             }
             .birthday-title {
                 font-size: 2.2em;
             }
-            input, .btn, #wish-display {
+            input, .btn {
                 font-size: 1em;
             }
             #wish-display {
                 padding: 20px;
-                font-size: 1.5em;
+                font-size: 1.4em; /* 缩小移动端字体，避免溢出 */
+                max-height: calc(100vh - 350px);
             }
             .decor {
                 width: 40px;
@@ -374,7 +386,7 @@
         const $confettiContainer = document.getElementById('confetti-container');
         const $container = document.querySelector('.container');
 
-        // 适合男生的生日祝福列表（新增几条更有个性的祝福）
+        // 生日祝福列表
         const wishes = [
             "愿你新的一岁，继续乘风破浪，做自己人生的主角！前路浩浩荡荡，万事尽可期待！",
             "生日快乐！愿你前路坦荡，万事顺意，每天都有新惊喜！事业蒸蒸日上，生活甜甜蜜蜜！",
@@ -393,22 +405,16 @@
             const username = $usernameInput.value.trim();
             const password = $passwordInput.value.trim();
 
-            // 验证账号密码
             if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD) {
-                // 登录成功
                 $errorMessage.classList.remove('show');
                 $loginContainer.style.opacity = '0';
                 $loginContainer.style.transform = 'translateY(20px)';
                 
-                // 添加登录成功类
                 setTimeout(() => {
                     $container.classList.add('login-success');
                     $loginContainer.style.display = 'none';
-                    
-                    // 登录成功后创建粒子背景
                     createParticles();
                     
-                    // 300ms后显示彩色纸屑效果
                     setTimeout(() => {
                         createConfetti();
                         setTimeout(() => {
@@ -417,10 +423,7 @@
                     }, 800);
                 }, 500);
             } else {
-                // 登录失败
                 $errorMessage.classList.add('show');
-                
-                // 输入框抖动动画
                 [ $usernameInput, $passwordInput ].forEach(input => {
                     input.style.transform = 'translateX(5px)';
                     setTimeout(() => input.style.transform = 'translateX(-5px)', 100);
@@ -445,33 +448,28 @@
 
         // 祝福按钮点击事件
         $wishButton.addEventListener('click', function() {
-            // 按钮点击动画
             this.classList.add('breath');
             setTimeout(() => {
                 this.classList.remove('breath');
             }, 1500);
             
-            // 随机选择一条祝福
             const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
             const fullWish = `黄宇，${randomWish}`;
 
-            // 清空显示区域
             $wishDisplay.innerHTML = '';
             $wishDisplay.classList.remove('show');
             
-            // 显示彩色纸屑效果
             createConfetti();
             setTimeout(() => {
                 $confettiContainer.classList.remove('active');
             }, 5000);
             
-            // 打字机效果显示祝福
             setTimeout(() => {
                 typeWriteEffect(fullWish);
             }, 300);
         });
 
-        // 打字机效果函数（优化动画节奏）
+        // 打字机效果函数
         function typeWriteEffect(text) {
             $wishDisplay.classList.add('show');
             
@@ -479,7 +477,6 @@
                 const charSpan = document.createElement('span');
                 charSpan.textContent = text[i];
                 
-                // 为特殊字符添加不同的延迟，让动画更有节奏感
                 const delay = text[i] === '，' || text[i] === '！' || text[i] === '。' 
                     ? i * 50 + 200 
                     : i * 50;
@@ -490,7 +487,6 @@
                     charSpan.style.opacity = '1';
                     charSpan.style.transform = 'translateY(0)';
                     
-                    // 最后一个字符显示完成后，添加轻微的呼吸动画
                     if (i === text.length - 1) {
                         setTimeout(() => {
                             $wishDisplay.classList.add('breath');
@@ -505,22 +501,16 @@
 
         // 创建粒子背景效果
         function createParticles() {
-            // 清空现有粒子
             $particles.innerHTML = '';
             
-            // 创建30个粒子
             for (let i = 0; i < 30; i++) {
                 const particle = document.createElement('div');
-                
-                // 随机粒子样式
                 const size = Math.random() * 6 + 2;
                 const x = Math.random() * 100;
                 const y = Math.random() * 100;
                 const opacity = Math.random() * 0.5 + 0.2;
                 const delay = Math.random() * 5;
                 const duration = Math.random() * 10 + 10;
-                
-                // 随机颜色（蓝色系）
                 const colors = ['#4299e1', '#38b2ac', '#9f7aea', '#667eea', '#48bb78'];
                 const color = colors[Math.floor(Math.random() * colors.length)];
                 
@@ -543,22 +533,16 @@
 
         // 创建彩色纸屑效果
         function createConfetti() {
-            // 清空现有纸屑
             $confettiContainer.innerHTML = '';
             $confettiContainer.classList.add('active');
             
-            // 创建50个纸屑
             for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
-                
-                // 随机纸屑样式
                 const size = Math.random() * 10 + 5;
                 const x = Math.random() * 100;
                 const rotation = Math.random() * 360;
                 const delay = Math.random() * 2;
                 const duration = Math.random() * 3 + 2;
-                
-                // 随机颜色
                 const colors = ['#4299e1', '#38b2ac', '#9f7aea', '#e53e3e', '#ed8936', '#48bb78', '#f6ad55', '#fef7fb'];
                 const color = colors[Math.floor(Math.random() * colors.length)];
                 
@@ -579,7 +563,6 @@
                 $confettiContainer.appendChild(confetti);
             }
             
-            // 添加下落动画
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes fall {
@@ -599,8 +582,6 @@
         // 页面加载完成后聚焦到账号输入框
         window.addEventListener('load', function() {
             $usernameInput.focus();
-            
-            // 初始创建少量粒子
             createParticles();
         });
 
