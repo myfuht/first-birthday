@@ -15,6 +15,18 @@
             margin: 0;
             background-image: url('https://img.freepik.com/free-vector/abstract-blue-geometric-pattern-background_1035-17545.jpg');
             background-size: cover;
+            overflow: hidden;
+            position: relative;
+        }
+        /* 粒子背景效果 */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
         }
         .container {
             background-color: rgba(255, 255, 255, 0.95);
@@ -24,7 +36,10 @@
             text-align: center;
             width: 90%;
             max-width: 700px;
-            transition: all 0.5s ease;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
         }
         /* 登录界面样式 */
         .login-container {
@@ -68,39 +83,84 @@
         .error-message.show {
             opacity: 1;
         }
-        /* 原有样式保持不变 */
-        h1 {
+        /* 标题动画 */
+        .birthday-title {
             color: #2d3748;
             font-size: 2.8em;
             margin-bottom: 10px;
             font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        .birthday-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4299e1, #9f7aea);
+            border-radius: 2px;
+            transition: width 0.8s ease;
+        }
+        .container.login-success .birthday-title::after {
+            width: 80%;
         }
         .subtitle {
             color: #4a5568;
             font-size: 1.2em;
             margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.3s;
         }
-        button {
-            background-color: #4299e1;
+        .container.login-success .subtitle {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* 按钮优化 */
+        .btn {
+            background: linear-gradient(90deg, #4299e1, #38b2ac);
             color: white;
             border: none;
             padding: 16px 32px;
             font-size: 1.2em;
             border-radius: 30px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             margin-top: 20px;
             font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.2);
         }
-        button:hover {
-            background-color: #3182ce;
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+        .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(66, 153, 225, 0.3);
+            box-shadow: 0 10px 25px rgba(66, 153, 225, 0.3);
         }
+        .btn:hover::before {
+            left: 100%;
+        }
+        .btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.2);
+        }
+        /* 祝福卡片样式 */
         #wish-display {
             margin-top: 30px;
-            padding: 30px;
-            background-color: #f8f9fa;
+            padding: 35px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #f0f8fb 100%);
             border-radius: 15px;
             min-height: 120px;
             display: flex;
@@ -109,50 +169,166 @@
             font-size: 1.8em;
             color: #2d3748;
             font-weight: 500;
-            line-height: 1.6;
+            line-height: 1.8;
             opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            transform: scale(0.95);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(66, 153, 225, 0.1);
         }
         #wish-display.show {
             opacity: 1;
+            transform: scale(1);
+        }
+        #wish-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #4299e1, #9f7aea, #38b2ac);
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
         }
         #wish-display span {
             opacity: 0;
             transform: translateY(20px);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-block;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        /* 装饰元素 */
+        .decor {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(66, 153, 225, 0.1);
+            z-index: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+        .decor-1 {
+            top: -20px;
+            left: -20px;
+            animation-delay: 0s;
+        }
+        .decor-2 {
+            bottom: -30px;
+            right: -30px;
+            animation-delay: 2s;
+            width: 80px;
+            height: 80px;
+        }
+        .decor-3 {
+            top: 40%;
+            left: -15px;
+            animation-delay: 4s;
+            width: 30px;
+            height: 30px;
+        }
+        /* 彩色纸屑效果容器 */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .confetti-container.active {
+            opacity: 1;
         }
         /* 内容区域初始隐藏 */
         .content-area {
             display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .container.login-success .content-area {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
         /* 登录成功后的动画效果 */
         .container.login-success {
             transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(66, 153, 225, 0.15);
         }
         /* 响应式调整 */
         @media (max-width: 576px) {
             .container {
                 padding: 30px 20px;
             }
-            h1 {
+            .birthday-title {
                 font-size: 2.2em;
             }
-            input, button, #wish-display {
+            input, .btn, #wish-display {
                 font-size: 1em;
             }
             #wish-display {
                 padding: 20px;
+                font-size: 1.5em;
             }
+            .decor {
+                width: 40px;
+                height: 40px;
+            }
+            .decor-2 {
+                width: 60px;
+                height: 60px;
+            }
+        }
+        /* 浮动动画 */
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-15px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+        /* 呼吸动画 */
+        @keyframes breathe {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .breath {
+            animation: breathe 3s ease-in-out infinite;
         }
     </style>
 </head>
 <body>
+    <!-- 粒子背景容器 -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- 彩色纸屑容器 -->
+    <div class="confetti-container" id="confetti-container"></div>
 
     <div class="container">
+        <!-- 装饰元素 -->
+        <div class="decor decor-1"></div>
+        <div class="decor decor-2"></div>
+        <div class="decor decor-3"></div>
+        
         <!-- 登录界面 -->
         <div class="login-container" id="login-container">
-            <h1>生日祝福</h1>
+            <h1 class="birthday-title">生日祝福</h1>
             <div class="subtitle">请登录后查看</div>
             
             <div class="form-group">
@@ -166,15 +342,15 @@
                 <div class="error-message" id="error-message">账号或密码错误，请重新输入</div>
             </div>
             
-            <button id="login-button">登录</button>
+            <button class="btn" id="login-button">登录</button>
         </div>
 
         <!-- 祝福内容区域（初始隐藏） -->
         <div class="content-area" id="content-area">
-            <h1>生日快乐</h1>
+            <h1 class="birthday-title">生日快乐</h1>
             <div class="subtitle">致 黄宇</div>
             
-            <button id="wish-button">点击获取我的祝福</button>
+            <button class="btn" id="wish-button">点击获取我的祝福</button>
 
             <div id="wish-display"></div>
         </div>
@@ -194,16 +370,22 @@
         const $errorMessage = document.getElementById('error-message');
         const $wishButton = document.getElementById('wish-button');
         const $wishDisplay = document.getElementById('wish-display');
+        const $particles = document.getElementById('particles');
+        const $confettiContainer = document.getElementById('confetti-container');
+        const $container = document.querySelector('.container');
 
-        // 适合男生的生日祝福列表
+        // 适合男生的生日祝福列表（新增几条更有个性的祝福）
         const wishes = [
-            "愿你新的一岁，继续乘风破浪，做自己人生的主角！",
-            "生日快乐！愿你前路坦荡，万事顺意，每天都有新惊喜！",
-            "新的旅程，愿你眼里有光，心中有爱，脚下有风！",
-            "生日快乐，兄弟！愿你健康、暴富、快乐，游戏段位越来越高！",
-            "愿你像一颗恒星，永远闪耀，把生活过成自己喜欢的模样！",
-            "新的一岁，愿你勇敢、自由，去探索更多未知的精彩！",
-            "生日快乐！愿你所有的努力都有回报，所有的梦想都能开花！"
+            "愿你新的一岁，继续乘风破浪，做自己人生的主角！前路浩浩荡荡，万事尽可期待！",
+            "生日快乐！愿你前路坦荡，万事顺意，每天都有新惊喜！事业蒸蒸日上，生活甜甜蜜蜜！",
+            "新的旅程，愿你眼里有光，心中有爱，脚下有风！所行皆坦途，所遇皆温暖！",
+            "生日快乐，兄弟！愿你健康、暴富、快乐三重丰收，游戏段位节节高，生活烦恼全赶跑！",
+            "愿你像一颗恒星，永远闪耀，把生活过成自己喜欢的模样！勇敢追梦，不负韶华！",
+            "新的一岁，愿你勇敢、自由，去探索更多未知的精彩！保持热爱，奔赴山海，未来可期！",
+            "生日快乐！愿你所有的努力都有回报，所有的梦想都能开花！家庭和睦，事业有成，幸福美满！",
+            "愿你遍历山河，觉得人间值得！新的一岁，平安喜乐，得偿所愿，万事胜意！",
+            "生日快乐！愿你如阳光，明媚不忧伤；如清风，自由无牵挂；如星辰，璀璨不迷茫！",
+            "新的一年，愿你解锁更多技能，遇见更好的自己，日子滚烫，人生闪亮！"
         ];
 
         // 登录按钮点击事件
@@ -216,16 +398,24 @@
                 // 登录成功
                 $errorMessage.classList.remove('show');
                 $loginContainer.style.opacity = '0';
+                $loginContainer.style.transform = 'translateY(20px)';
                 
-                // 延迟切换显示，添加过渡效果
+                // 添加登录成功类
                 setTimeout(() => {
+                    $container.classList.add('login-success');
                     $loginContainer.style.display = 'none';
-                    $contentArea.style.display = 'block';
-                    document.querySelector('.container').classList.add('login-success');
                     
-                    // 自动聚焦到祝福按钮
-                    $wishButton.focus();
-                }, 300);
+                    // 登录成功后创建粒子背景
+                    createParticles();
+                    
+                    // 300ms后显示彩色纸屑效果
+                    setTimeout(() => {
+                        createConfetti();
+                        setTimeout(() => {
+                            $confettiContainer.classList.remove('active');
+                        }, 5000);
+                    }, 800);
+                }, 500);
             } else {
                 // 登录失败
                 $errorMessage.classList.add('show');
@@ -255,36 +445,169 @@
 
         // 祝福按钮点击事件
         $wishButton.addEventListener('click', function() {
+            // 按钮点击动画
+            this.classList.add('breath');
+            setTimeout(() => {
+                this.classList.remove('breath');
+            }, 1500);
+            
+            // 随机选择一条祝福
             const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
             const fullWish = `黄宇，${randomWish}`;
 
+            // 清空显示区域
             $wishDisplay.innerHTML = '';
             $wishDisplay.classList.remove('show');
             
-            typeWriteEffect(fullWish);
+            // 显示彩色纸屑效果
+            createConfetti();
+            setTimeout(() => {
+                $confettiContainer.classList.remove('active');
+            }, 5000);
+            
+            // 打字机效果显示祝福
+            setTimeout(() => {
+                typeWriteEffect(fullWish);
+            }, 300);
         });
 
-        // 打字机效果函数
+        // 打字机效果函数（优化动画节奏）
         function typeWriteEffect(text) {
             $wishDisplay.classList.add('show');
             
             for (let i = 0; i < text.length; i++) {
                 const charSpan = document.createElement('span');
                 charSpan.textContent = text[i];
+                
+                // 为特殊字符添加不同的延迟，让动画更有节奏感
+                const delay = text[i] === '，' || text[i] === '！' || text[i] === '。' 
+                    ? i * 50 + 200 
+                    : i * 50;
+                
                 $wishDisplay.appendChild(charSpan);
                 
                 setTimeout(() => {
                     charSpan.style.opacity = '1';
                     charSpan.style.transform = 'translateY(0)';
-                }, i * 50);
+                    
+                    // 最后一个字符显示完成后，添加轻微的呼吸动画
+                    if (i === text.length - 1) {
+                        setTimeout(() => {
+                            $wishDisplay.classList.add('breath');
+                            setTimeout(() => {
+                                $wishDisplay.classList.remove('breath');
+                            }, 3000);
+                        }, 500);
+                    }
+                }, delay);
             }
+        }
+
+        // 创建粒子背景效果
+        function createParticles() {
+            // 清空现有粒子
+            $particles.innerHTML = '';
+            
+            // 创建30个粒子
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                
+                // 随机粒子样式
+                const size = Math.random() * 6 + 2;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const opacity = Math.random() * 0.5 + 0.2;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 10 + 10;
+                
+                // 随机颜色（蓝色系）
+                const colors = ['#4299e1', '#38b2ac', '#9f7aea', '#667eea', '#48bb78'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    background-color: ${color};
+                    border-radius: 50%;
+                    left: ${x}%;
+                    top: ${y}%;
+                    opacity: ${opacity};
+                    animation: float ${duration}s ease-in-out ${delay}s infinite;
+                    pointer-events: none;
+                `;
+                
+                $particles.appendChild(particle);
+            }
+        }
+
+        // 创建彩色纸屑效果
+        function createConfetti() {
+            // 清空现有纸屑
+            $confettiContainer.innerHTML = '';
+            $confettiContainer.classList.add('active');
+            
+            // 创建50个纸屑
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                
+                // 随机纸屑样式
+                const size = Math.random() * 10 + 5;
+                const x = Math.random() * 100;
+                const rotation = Math.random() * 360;
+                const delay = Math.random() * 2;
+                const duration = Math.random() * 3 + 2;
+                
+                // 随机颜色
+                const colors = ['#4299e1', '#38b2ac', '#9f7aea', '#e53e3e', '#ed8936', '#48bb78', '#f6ad55', '#fef7fb'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                confetti.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    background-color: ${color};
+                    left: ${x}%;
+                    top: -10px;
+                    transform: rotate(${rotation}deg);
+                    opacity: ${Math.random() * 0.8 + 0.2};
+                    animation: fall ${duration}s linear ${delay}s forwards;
+                    pointer-events: none;
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                `;
+                
+                $confettiContainer.appendChild(confetti);
+            }
+            
+            // 添加下落动画
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fall {
+                    0% {
+                        transform: translateY(0) rotate(0deg);
+                        opacity: 0.8;
+                    }
+                    100% {
+                        transform: translateY(100vh) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
         }
 
         // 页面加载完成后聚焦到账号输入框
         window.addEventListener('load', function() {
             $usernameInput.focus();
+            
+            // 初始创建少量粒子
+            createParticles();
+        });
+
+        // 窗口大小改变时重新创建粒子
+        window.addEventListener('resize', function() {
+            createParticles();
         });
     </script>
-
 </body>
 </html>
