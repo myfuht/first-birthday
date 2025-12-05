@@ -7,13 +7,13 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #f0f8fb; /* 更清爽的浅蓝色背景 */
+            background-color: #f0f8fb;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-image: url('https://img.freepik.com/free-vector/abstract-blue-geometric-pattern-background_1035-17545.jpg'); /* 更中性的几何背景 */
+            background-image: url('https://img.freepik.com/free-vector/abstract-blue-geometric-pattern-background_1035-17545.jpg');
             background-size: cover;
         }
         .container {
@@ -24,9 +24,53 @@
             text-align: center;
             width: 90%;
             max-width: 700px;
+            transition: all 0.5s ease;
         }
+        /* 登录界面样式 */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-group {
+            position: relative;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 1.1em;
+        }
+        input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        input:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.1);
+        }
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.95em;
+            margin-top: 5px;
+            height: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .error-message.show {
+            opacity: 1;
+        }
+        /* 原有样式保持不变 */
         h1 {
-            color: #2d3748; /* 深灰色标题 */
+            color: #2d3748;
             font-size: 2.8em;
             margin-bottom: 10px;
             font-weight: 700;
@@ -37,7 +81,7 @@
             margin-bottom: 30px;
         }
         button {
-            background-color: #4299e1; /* 蓝色按钮 */
+            background-color: #4299e1;
             color: white;
             border: none;
             padding: 16px 32px;
@@ -66,34 +110,91 @@
             color: #2d3748;
             font-weight: 500;
             line-height: 1.6;
-            opacity: 0; /* 初始隐藏 */
+            opacity: 0;
             transition: opacity 0.5s ease-in-out;
         }
         #wish-display.show {
-            opacity: 1; /* 显示时淡入 */
+            opacity: 1;
         }
-        /* 为每个字符添加动画效果的基础样式 */
         #wish-display span {
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            display: inline-block; /* 让span可以被定位和动画 */
+            display: inline-block;
+        }
+        /* 内容区域初始隐藏 */
+        .content-area {
+            display: none;
+        }
+        /* 登录成功后的动画效果 */
+        .container.login-success {
+            transform: scale(1.02);
+        }
+        /* 响应式调整 */
+        @media (max-width: 576px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 2.2em;
+            }
+            input, button, #wish-display {
+                font-size: 1em;
+            }
+            #wish-display {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>生日快乐</h1>
-        <div class="subtitle">致 黄宇</div>
-        
-        <button id="wish-button">点击获取我的祝福</button>
+        <!-- 登录界面 -->
+        <div class="login-container" id="login-container">
+            <h1>生日祝福</h1>
+            <div class="subtitle">请登录后查看</div>
+            
+            <div class="form-group">
+                <label for="username">账号</label>
+                <input type="text" id="username" placeholder="请输入账号" autocomplete="off">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" placeholder="请输入密码">
+                <div class="error-message" id="error-message">账号或密码错误，请重新输入</div>
+            </div>
+            
+            <button id="login-button">登录</button>
+        </div>
 
-        <!-- 用于显示祝福的区域 -->
-        <div id="wish-display"></div>
+        <!-- 祝福内容区域（初始隐藏） -->
+        <div class="content-area" id="content-area">
+            <h1>生日快乐</h1>
+            <div class="subtitle">致 黄宇</div>
+            
+            <button id="wish-button">点击获取我的祝福</button>
+
+            <div id="wish-display"></div>
+        </div>
     </div>
 
     <script>
+        // 登录配置
+        const CORRECT_USERNAME = 'huangyuhappybirthday';
+        const CORRECT_PASSWORD = '888888';
+
+        // DOM元素
+        const $loginContainer = document.getElementById('login-container');
+        const $contentArea = document.getElementById('content-area');
+        const $usernameInput = document.getElementById('username');
+        const $passwordInput = document.getElementById('password');
+        const $loginButton = document.getElementById('login-button');
+        const $errorMessage = document.getElementById('error-message');
+        const $wishButton = document.getElementById('wish-button');
+        const $wishDisplay = document.getElementById('wish-display');
+
         // 适合男生的生日祝福列表
         const wishes = [
             "愿你新的一岁，继续乘风破浪，做自己人生的主角！",
@@ -105,38 +206,73 @@
             "生日快乐！愿你所有的努力都有回报，所有的梦想都能开花！"
         ];
 
-        const $button = document.getElementById('wish-button');
-        const $wishDisplay = document.getElementById('wish-display');
+        // 登录按钮点击事件
+        $loginButton.addEventListener('click', function() {
+            const username = $usernameInput.value.trim();
+            const password = $passwordInput.value.trim();
 
-        $button.addEventListener('click', function() {
-            // 1. 随机选择一条祝福
+            // 验证账号密码
+            if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD) {
+                // 登录成功
+                $errorMessage.classList.remove('show');
+                $loginContainer.style.opacity = '0';
+                
+                // 延迟切换显示，添加过渡效果
+                setTimeout(() => {
+                    $loginContainer.style.display = 'none';
+                    $contentArea.style.display = 'block';
+                    document.querySelector('.container').classList.add('login-success');
+                    
+                    // 自动聚焦到祝福按钮
+                    $wishButton.focus();
+                }, 300);
+            } else {
+                // 登录失败
+                $errorMessage.classList.add('show');
+                
+                // 输入框抖动动画
+                [ $usernameInput, $passwordInput ].forEach(input => {
+                    input.style.transform = 'translateX(5px)';
+                    setTimeout(() => input.style.transform = 'translateX(-5px)', 100);
+                    setTimeout(() => input.style.transform = 'translateX(5px)', 200);
+                    setTimeout(() => input.style.transform = 'translateX(0)', 300);
+                });
+            }
+        });
+
+        // 键盘回车登录
+        $passwordInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                $loginButton.click();
+            }
+        });
+
+        $usernameInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                $passwordInput.focus();
+            }
+        });
+
+        // 祝福按钮点击事件
+        $wishButton.addEventListener('click', function() {
             const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
-            
-            // 2. 拼接成完整的祝福语句
             const fullWish = `黄宇，${randomWish}`;
 
-            // 3. 清空显示区域，准备显示新内容
-            $wishDisplay.innerHTML = ''; 
-            $wishDisplay.classList.remove('show'); 
+            $wishDisplay.innerHTML = '';
+            $wishDisplay.classList.remove('show');
             
-            // 4. 调用打字机函数来显示文字
             typeWriteEffect(fullWish);
         });
 
-        // 定义文字飘出（打字机）效果的函数
+        // 打字机效果函数
         function typeWriteEffect(text) {
-            $wishDisplay.classList.add('show'); // 先让容器淡入
+            $wishDisplay.classList.add('show');
             
             for (let i = 0; i < text.length; i++) {
-                // 创建一个span元素来包裹每个字符
                 const charSpan = document.createElement('span');
                 charSpan.textContent = text[i];
-                
-                // 将span添加到显示区域
                 $wishDisplay.appendChild(charSpan);
                 
-                // 使用setTimeout来为每个字符设置延迟动画
-                // 延迟时间 = 字符索引 * 50毫秒，可以调整这个值来改变动画速度
                 setTimeout(() => {
                     charSpan.style.opacity = '1';
                     charSpan.style.transform = 'translateY(0)';
@@ -144,6 +280,10 @@
             }
         }
 
+        // 页面加载完成后聚焦到账号输入框
+        window.addEventListener('load', function() {
+            $usernameInput.focus();
+        });
     </script>
 
 </body>
