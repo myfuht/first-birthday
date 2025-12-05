@@ -10,16 +10,15 @@
             background-color: #f0f8fb;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* 改为顶部对齐，避免内容被视口底部裁剪 */
-            min-height: 100vh; /* 用min-height替代height，适配长内容 */
+            align-items: flex-start;
+            min-height: 100vh;
             margin: 0;
             background-image: url('https://img.freepik.com/free-vector/abstract-blue-geometric-pattern-background_1035-17545.jpg');
             background-size: cover;
-            overflow: auto; /* 允许页面滚动，避免内容溢出视口 */
+            overflow: auto;
             position: relative;
-            padding: 20px 0; /* 增加上下内边距，避免内容贴边 */
+            padding: 30px 0; /* 增加上下内边距，避免内容贴边 */
         }
-        /* 粒子背景效果 - 降低层级，避免遮挡内容 */
         .particles {
             position: absolute;
             top: 0;
@@ -27,11 +26,11 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 0; /* 确保在最底层 */
+            z-index: 0;
         }
         .container {
             background-color: rgba(255, 255, 255, 0.95);
-            padding: 50px;
+            padding: 40px 30px; /* 调整内边距，避免文字被容器边缘遮挡 */
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -40,8 +39,8 @@
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             z-index: 1;
-            overflow: visible; /* 允许内部内容溢出显示 */
-            margin-top: 30px; /* 增加顶部间距 */
+            overflow: visible;
+            margin-top: 20px;
         }
         /* 登录界面样式 */
         .login-container {
@@ -136,7 +135,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(66, 153, 225, 0.2);
-            z-index: 2; /* ; /* 按钮层级高于背景 */
+            z-index: 2;
         }
         .btn::before {
             content: '';
@@ -159,31 +158,30 @@
             transform: translateY(-1px);
             box-shadow: 0 5px 15px rgba(66, 153, 225, 0.2);
         }
-        /* 祝福卡片样式 - 核心修改：确保内容完整显示 */
+        /* 祝福卡片样式 - 核心调整：分两行+防遮挡 */
         #wish-display {
             margin-top: 30px;
-            padding: 35px;
+            padding: 30px 25px; /* 加大内边距，避免文字贴边 */
             background: linear-gradient(135deg, #f8f9fa 0%, #f0f8fb 100%);
             border-radius: 15px;
-            min-height: 120px;
-            max-height: calc(100vh - 400px); /* 限制最大高度，避免超出视口 */
-            overflow-y: auto; /* 内容过多时显示垂直滚动条 */
-            display: flex;
-            align-items: flex-start; /* 文字顶部对齐，避免垂直居中导致裁剪 */
-            justify-content: center;
-            font-size: 1.8em;
+            min-height: 150px; /* 增加最小高度，容纳两行文字 */
+            max-height: calc(100vh - 400px);
+            overflow-y: auto;
+            display: block; /* 取消flex，改用block让文字自然换行 */
+            text-align: left; /* 左对齐，两行呈现更整齐 */
+            font-size: 1.7em;
             color: #2d3748;
             font-weight: 500;
-            line-height: 1.8;
+            line-height: 2; /* 加大行高，两行更清晰 */
             opacity: 0;
             transform: scale(0.95);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(66, 153, 225, 0.1);
-            z-index: 2; /* 提高层级，避免被粒子/纸屑遮挡 */
+            z-index: 2;
             width: 100%;
-            box-sizing: border-box; /* 确保padding不撑大容器 */
+            box-sizing: border-box;
         }
         #wish-display.show {
             opacity: 1;
@@ -200,27 +198,29 @@
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
         }
-        #wish-display span {
+        /* 打字机字符样式 */
+        #wish-display .char {
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-block;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-        /* 装饰元素 */
+        /* 装饰元素 - 调整位置避免遮挡文字 */
         .decor {
             position: absolute;
             width: 60px;
             height: 60px;
             border-radius: 50%;
             background: rgba(66, 153, 225, 0.1);
-            z-index: 0; /* 装饰元素在容器内底层 */
+            z-index: 0;
             animation: float 6s ease-in-out infinite;
         }
         .decor-1 {
             top: -20px;
             left: -20px;
             animation-delay: 0s;
+            opacity: 0.8; /* 降低透明度，减少遮挡影响 */
         }
         .decor-2 {
             bottom: -30px;
@@ -228,15 +228,16 @@
             animation-delay: 2s;
             width: 80px;
             height: 80px;
+            opacity: 0.8;
         }
         .decor-3 {
-            top: 40%;
+            top: 80%; /* 下移装饰元素，避免遮挡文字区域 */
             left: -15px;
             animation-delay: 4s;
             width: 30px;
             height: 30px;
         }
-        /* 彩色纸屑效果容器 - 层级低于祝福内容 */
+        /* 彩色纸屑效果容器 */
         .confetti-container {
             position: fixed;
             top: 0;
@@ -244,7 +245,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1; /* 低于祝福卡片 */
+            z-index: 1;
             opacity: 0;
             transition: opacity 0.5s ease;
         }
@@ -270,7 +271,7 @@
             transform: scale(1.02);
             box-shadow: 0 20px 40px rgba(66, 153, 225, 0.15);
         }
-        /* 响应式调整 - 优化小屏幕文字大小 */
+        /* 响应式调整 - 适配小屏幕两行显示 */
         @media (max-width: 576px) {
             .container {
                 padding: 30px 20px;
@@ -283,8 +284,9 @@
                 font-size: 1em;
             }
             #wish-display {
-                padding: 20px;
-                font-size: 1.4em; /* 缩小移动端字体，避免溢出 */
+                padding: 25px 20px;
+                font-size: 1.4em;
+                line-height: 1.9;
                 max-height: calc(100vh - 350px);
             }
             .decor {
@@ -386,18 +388,18 @@
         const $confettiContainer = document.getElementById('confetti-container');
         const $container = document.querySelector('.container');
 
-        // 生日祝福列表
+        // 祝福列表：每句分两行（添加<br>实现换行）
         const wishes = [
-            "愿你新的一岁，继续乘风破浪，做自己人生的主角！前路浩浩荡荡，万事尽可期待！",
-            "生日快乐！愿你前路坦荡，万事顺意，每天都有新惊喜！事业蒸蒸日上，生活甜甜蜜蜜！",
-            "新的旅程，愿你眼里有光，心中有爱，脚下有风！所行皆坦途，所遇皆温暖！",
-            "生日快乐，兄弟！愿你健康、暴富、快乐三重丰收，游戏段位节节高，生活烦恼全赶跑！",
-            "愿你像一颗恒星，永远闪耀，把生活过成自己喜欢的模样！勇敢追梦，不负韶华！",
-            "新的一岁，愿你勇敢、自由，去探索更多未知的精彩！保持热爱，奔赴山海，未来可期！",
-            "生日快乐！愿你所有的努力都有回报，所有的梦想都能开花！家庭和睦，事业有成，幸福美满！",
-            "愿你遍历山河，觉得人间值得！新的一岁，平安喜乐，得偿所愿，万事胜意！",
-            "生日快乐！愿你如阳光，明媚不忧伤；如清风，自由无牵挂；如星辰，璀璨不迷茫！",
-            "新的一年，愿你解锁更多技能，遇见更好的自己，日子滚烫，人生闪亮！"
+            "愿你新的一岁，继续乘风破浪，<br>做自己人生的主角！前路浩浩荡荡，万事尽可期待！",
+            "生日快乐！愿你前路坦荡，万事顺意，<br>每天都有新惊喜！事业蒸蒸日上，生活甜甜蜜蜜！",
+            "新的旅程，愿你眼里有光，心中有爱，<br>脚下有风！所行皆坦途，所遇皆温暖！",
+            "生日快乐，兄弟！愿你健康、暴富、快乐三重丰收，<br>游戏段位节节高，生活烦恼全赶跑！",
+            "愿你像一颗恒星，永远闪耀，<br>把生活过成自己喜欢的模样！勇敢追梦，不负韶华！",
+            "新的一岁，愿你勇敢、自由，<br>去探索更多未知的精彩！保持热爱，奔赴山海，未来可期！",
+            "生日快乐！愿你所有的努力都有回报，<br>所有的梦想都能开花！家庭和睦，事业有成，幸福美满！",
+            "愿你遍历山河，觉得人间值得！<br>新的一岁，平安喜乐，得偿所愿，万事胜意！",
+            "生日快乐！愿你如阳光，明媚不忧伤；<br>如清风，自由无牵挂；如星辰，璀璨不迷茫！",
+            "新的一年，愿你解锁更多技能，遇见更好的自己，<br>日子滚烫，人生闪亮！"
         ];
 
         // 登录按钮点击事件
@@ -469,34 +471,51 @@
             }, 300);
         });
 
-        // 打字机效果函数
+        // 打字机效果函数（支持<br>换行）
         function typeWriteEffect(text) {
             $wishDisplay.classList.add('show');
-            
-            for (let i = 0; i < text.length; i++) {
-                const charSpan = document.createElement('span');
-                charSpan.textContent = text[i];
-                
-                const delay = text[i] === '，' || text[i] === '！' || text[i] === '。' 
-                    ? i * 50 + 200 
-                    : i * 50;
-                
-                $wishDisplay.appendChild(charSpan);
-                
-                setTimeout(() => {
-                    charSpan.style.opacity = '1';
-                    charSpan.style.transform = 'translateY(0)';
+            // 将文本按<br>分割成片段
+            const segments = text.split('<br>');
+            let currentIndex = 0;
+            let totalDelay = 0;
+
+            segments.forEach((segment, segIdx) => {
+                // 处理当前片段的每个字符
+                for (let i = 0; i < segment.length; i++) {
+                    const charSpan = document.createElement('span');
+                    charSpan.className = 'char';
+                    charSpan.textContent = segment[i];
+                    $wishDisplay.appendChild(charSpan);
+
+                    // 字符动画延迟
+                    const delay = segment[i] === '，' || segment[i] === '！' || segment[i] === '。' 
+                        ? totalDelay + 200 
+                        : totalDelay + 50;
                     
-                    if (i === text.length - 1) {
-                        setTimeout(() => {
-                            $wishDisplay.classList.add('breath');
-                            setTimeout(() => {
-                                $wishDisplay.classList.remove('breath');
-                            }, 3000);
-                        }, 500);
-                    }
-                }, delay);
-            }
+                    setTimeout(() => {
+                        charSpan.style.opacity = '1';
+                        charSpan.style.transform = 'translateY(0)';
+                    }, delay);
+
+                    totalDelay += 50;
+                }
+
+                // 不是最后一个片段，添加换行标签
+                if (segIdx !== segments.length - 1) {
+                    const br = document.createElement('br');
+                    $wishDisplay.appendChild(br);
+                    // 换行后增加一点延迟，让两行区分更明显
+                    totalDelay += 200;
+                }
+            });
+
+            // 最后一个字符显示完成后添加呼吸动画
+            setTimeout(() => {
+                $wishDisplay.classList.add('breath');
+                setTimeout(() => {
+                    $wishDisplay.classList.remove('breath');
+                }, 3000);
+            }, totalDelay + 500);
         }
 
         // 创建粒子背景效果
